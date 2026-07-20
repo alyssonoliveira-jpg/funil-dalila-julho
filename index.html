@@ -173,7 +173,8 @@
   .callout b, .callout strong { color: var(--ink); }
 
   .qual-chart { display: flex; flex-direction: column; gap: 1.9rem; padding: 0.6rem 0 0.4rem; }
-  .qual-row-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.55rem; }
+  .qual-row-head { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.55rem; }
+  .qual-row-dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
   .qual-row-status { font-size: 1rem; font-weight: 700; color: var(--ink); }
   .qual-row-meta { font-size: 0.82rem; color: var(--muted); font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
   .qual-bar-wrap { position: relative; padding-top: 5rem; }
@@ -649,9 +650,9 @@
     { key: 'none', label: 'Não informado', color: 'var(--temp-none)', text: '#000000' }
   ];
   var qualData = [
-    { status: 'Ganho', n: 288, share: '20,7% do funil', vals: [21.5, 63.2, 14.2, 1.0] },
-    { status: 'Aberto', n: 302, share: '21,7% do funil', vals: [28.5, 2.3, 0.3, 68.9] },
-    { status: 'Perdido', n: 801, share: '57,6% do funil', vals: [31.7, 4.4, 0.2, 63.7] }
+    { status: 'Ganho', n: 288, share: '20,7% do funil', vals: [21.5, 63.2, 14.2, 1.0], dot: 'var(--status-ganho)' },
+    { status: 'Aberto', n: 302, share: '21,7% do funil', vals: [28.5, 2.3, 0.3, 68.9], dot: 'var(--status-aberto)', dotBorder: 'var(--status-aberto-border)' },
+    { status: 'Perdido', n: 801, share: '57,6% do funil', vals: [31.7, 4.4, 0.2, 63.7], dot: 'var(--status-perdido)' }
   ];
   var INLINE_THRESHOLD = 8;   // % — abaixo disso o rótulo vira um callout externo
   var TIER_GAP_PCT = 7;       // distância mínima (%) entre callouts para não empilhar em níveis diferentes
@@ -664,12 +665,17 @@
 
     var head = document.createElement('div');
     head.className = 'qual-row-head';
+    var dotEl = document.createElement('span');
+    dotEl.className = 'qual-row-dot';
+    dotEl.style.background = row.dot;
+    if (row.dotBorder) dotEl.style.border = '1.5px solid ' + row.dotBorder;
     var statusEl = document.createElement('span');
     statusEl.className = 'qual-row-status';
     statusEl.textContent = row.status;
     var metaEl = document.createElement('span');
     metaEl.className = 'qual-row-meta';
     metaEl.textContent = row.n + ' negócios · ' + row.share;
+    head.appendChild(dotEl);
     head.appendChild(statusEl);
     head.appendChild(metaEl);
     rowEl.appendChild(head);
