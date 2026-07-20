@@ -159,9 +159,23 @@
   .stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
 
   .propbar { display: flex; height: 46px; border-radius: 8px; overflow: hidden; border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--border); }
-  .propbar > div { display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: #000; }
+  .propbar > div { display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: #000; transition: filter 0.15s; }
   .propbar-labels { display: flex; margin-top: 0.5rem; }
   .propbar-labels > div { font-size: 0.78rem; font-weight: 600; text-align: center; color: var(--muted); }
+
+  .hoverable { cursor: pointer; }
+  .propbar .hoverable:hover { filter: brightness(1.12); }
+  .hbar-track.hoverable:hover .hbar-fill { filter: brightness(1.18); }
+  .chart-tooltip {
+    position: fixed; z-index: 50; pointer-events: none;
+    background: var(--ink); color: var(--bg);
+    font-size: 0.78rem; font-weight: 600; font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    padding: 0.4rem 0.75rem; border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    opacity: 0; transform: translate(-50%, -8px); transition: opacity 0.1s;
+    white-space: nowrap;
+  }
+  .chart-tooltip.visible { opacity: 1; }
 
   .callout {
     font-size: 0.92rem;
@@ -309,6 +323,7 @@
 <button class="nav-arrow next" id="nextBtn" aria-label="Próximo slide">&#8594;</button>
 <div class="slide-counter" id="slideCounter">1 / 10</div>
 <div class="nav-dots" id="navDots"></div>
+<div class="chart-tooltip" id="chartTooltip"></div>
 <div class="deck" id="deck">
 
   <!-- SLIDE 1 — CAPA -->
@@ -336,9 +351,9 @@
     </div>
 
     <div class="propbar">
-      <div style="width:20.7%;background:var(--status-ganho);color:#fff;">Ganho</div>
-      <div style="width:21.7%;background:var(--status-aberto);color:#000;">Aberto</div>
-      <div style="width:57.6%;background:var(--status-perdido);color:#fff;">Perdido</div>
+      <div class="hoverable" style="width:20.7%;background:var(--status-ganho);color:#fff;" data-tooltip="Ganho · 288 negócios (20,7% do funil)">Ganho</div>
+      <div class="hoverable" style="width:21.7%;background:var(--status-aberto);color:#000;" data-tooltip="Aberto · 302 negócios (21,7% do funil)">Aberto</div>
+      <div class="hoverable" style="width:57.6%;background:var(--status-perdido);color:#fff;" data-tooltip="Perdido · 801 negócios (57,6% do funil)">Perdido</div>
     </div>
 
     <p class="callout"><strong>Leitura:</strong> 57,6% do funil ainda se perde antes de qualificar de verdade, e 21,7% fica aberto — são essas duas fatias que concentram as melhorias deste material. A fatia de ganhos (20,7%) é onde a assertividade da pontuação foi corrigida.</p>
@@ -508,11 +523,11 @@
     <div class="two-col">
       <div>
         <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Principais motivos</h3>
-        <div class="hbar-row"><div class="hbar-label">Sem retorno</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--status-perdido)"></div></div><div class="hbar-val">464</div></div>
-        <div class="hbar-row"><div class="hbar-label">Whatsapp inválido</div><div class="hbar-track"><div class="hbar-fill" style="width:37%;background:var(--status-perdido)"></div></div><div class="hbar-val">173</div></div>
-        <div class="hbar-row"><div class="hbar-label">Perdido em N1 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:19%;background:var(--status-perdido)"></div></div><div class="hbar-val">88</div></div>
-        <div class="hbar-row"><div class="hbar-label">Recadastro</div><div class="hbar-track"><div class="hbar-fill" style="width:6.5%;background:var(--status-perdido)"></div></div><div class="hbar-val">30</div></div>
-        <div class="hbar-row"><div class="hbar-label">Perdido em N2 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:2%;background:var(--status-perdido)"></div></div><div class="hbar-val">10</div></div>
+        <div class="hbar-row"><div class="hbar-label">Sem retorno</div><div class="hbar-track hoverable" data-tooltip="Sem retorno · 464 negócios (57,9% dos perdidos)"><div class="hbar-fill" style="width:100%;background:var(--status-perdido)"></div></div><div class="hbar-val">464</div></div>
+        <div class="hbar-row"><div class="hbar-label">Whatsapp inválido</div><div class="hbar-track hoverable" data-tooltip="Whatsapp inválido · 173 negócios (21,6% dos perdidos)"><div class="hbar-fill" style="width:37%;background:var(--status-perdido)"></div></div><div class="hbar-val">173</div></div>
+        <div class="hbar-row"><div class="hbar-label">Perdido em N1 (s/ motivo)</div><div class="hbar-track hoverable" data-tooltip="Perdido em N1 (s/ motivo) · 88 negócios (11,0% dos perdidos)"><div class="hbar-fill" style="width:19%;background:var(--status-perdido)"></div></div><div class="hbar-val">88</div></div>
+        <div class="hbar-row"><div class="hbar-label">Recadastro</div><div class="hbar-track hoverable" data-tooltip="Recadastro · 30 negócios (3,7% dos perdidos)"><div class="hbar-fill" style="width:6.5%;background:var(--status-perdido)"></div></div><div class="hbar-val">30</div></div>
+        <div class="hbar-row"><div class="hbar-label">Perdido em N2 (s/ motivo)</div><div class="hbar-track hoverable" data-tooltip="Perdido em N2 (s/ motivo) · 10 negócios (1,2% dos perdidos)"><div class="hbar-fill" style="width:2%;background:var(--status-perdido)"></div></div><div class="hbar-val">10</div></div>
       </div>
       <div>
         <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Onde a perda acontece (etapa)</h3>
@@ -700,6 +715,40 @@
     col.appendChild(list);
 
     qualEl.appendChild(col);
+  });
+
+  // ---- Tooltip ao passar o mouse nas barras (propbar, hbar) ----
+  var tooltip = document.getElementById('chartTooltip');
+  var tooltipTarget = null;
+
+  function positionTooltip(x, y) {
+    var w = tooltip.offsetWidth;
+    var h = tooltip.offsetHeight;
+    var left = Math.min(Math.max(x, w / 2 + 8), window.innerWidth - w / 2 - 8);
+    var top = Math.max(y - h - 14, 8);
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = top + 'px';
+  }
+
+  document.addEventListener('mouseover', function (e) {
+    var el = e.target.closest ? e.target.closest('.hoverable') : null;
+    if (!el || el === tooltipTarget) return;
+    tooltipTarget = el;
+    tooltip.textContent = el.getAttribute('data-tooltip') || '';
+    tooltip.classList.add('visible');
+    positionTooltip(e.clientX, e.clientY);
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!tooltipTarget) return;
+    positionTooltip(e.clientX, e.clientY);
+  });
+
+  document.addEventListener('mouseout', function (e) {
+    if (!tooltipTarget) return;
+    if (tooltipTarget.contains(e.relatedTarget)) return;
+    tooltip.classList.remove('visible');
+    tooltipTarget = null;
   });
 })();
 </script>
