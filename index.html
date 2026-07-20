@@ -172,36 +172,31 @@
   }
   .callout b, .callout strong { color: var(--ink); }
 
-  .qual-chart { display: flex; flex-direction: column; gap: 1.9rem; padding: 0.6rem 0 0.4rem; }
-  .qual-row-head { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.55rem; }
+  .qual-chart {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.6rem;
+    padding: 0.6rem 0 0.4rem;
+  }
+  .qual-col {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 1.3rem 1.2rem 1.4rem; display: flex; flex-direction: column; align-items: center;
+  }
+  .qual-row-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.2rem; align-self: flex-start; }
   .qual-row-dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
-  .qual-row-status { font-size: 1rem; font-weight: 700; color: var(--ink); }
-  .qual-row-meta { font-size: 0.82rem; color: var(--muted); font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-  .qual-bar-wrap { position: relative; padding-top: 5rem; }
-  .qual-bar {
-    display: flex; height: 44px; border-radius: 8px; overflow: hidden;
-    border: 1px solid var(--border);
+  .qual-row-status { font-size: 0.98rem; font-weight: 700; color: var(--ink); }
+  .qual-row-meta { font-size: 0.76rem; color: var(--muted); font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .donut { width: 148px; height: 148px; border-radius: 50%; position: relative; flex: none; }
+  .donut-hole {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 62%; height: 62%; border-radius: 50%; background: var(--surface);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
   }
-  .qual-seg {
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.78rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums;
-    border-right: 1px solid color-mix(in srgb, var(--bg) 35%, transparent);
-    position: relative; min-width: 0;
-  }
-  .qual-seg:last-child { border-right: none; }
-  .qual-seg .qual-seg-label { padding: 0 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: clip; }
-  .qual-callout {
-    position: absolute; transform: translateX(-50%);
-    display: flex; align-items: center; gap: 0.35em;
-    font-size: 0.74rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums;
-    color: var(--ink); white-space: nowrap;
-    background: var(--surface); border: 1px solid var(--border);
-    padding: 0.18rem 0.55rem; border-radius: 999px;
-  }
-  .qual-callout .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-  .legend { display: flex; gap: 1.4rem; justify-content: center; margin-top: 0.4rem; flex-wrap: wrap; }
-  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
-  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+  .donut-count { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 1.4rem; font-weight: 700; color: var(--ink); line-height: 1; }
+  .donut-share { font-size: 0.66rem; color: var(--muted); margin-top: 0.25rem; text-align: center; max-width: 5.5rem; line-height: 1.2; }
+  .temp-list { width: 100%; margin-top: 1.3rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .temp-list-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; }
+  .temp-list-row .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .temp-list-label { color: var(--muted); flex: 1; }
+  .temp-list-val { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); }
 
   .hbar-row { display: grid; grid-template-columns: 190px 1fr 3.2rem; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem; }
   .hbar-label { font-size: 0.85rem; color: var(--ink); }
@@ -360,12 +355,6 @@
     <p class="slide-subtitle">Frio = N1 · Morno = N2 · Quente = N3 — distribuição dentro de cada status</p>
 
     <div class="qual-chart" id="qualChart"></div>
-    <div class="legend">
-      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-frio)"></span>Frio (N1)</div>
-      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-morno)"></span>Morno (N2)</div>
-      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-quente)"></span>Quente (N3)</div>
-      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-none)"></span>Não informado</div>
-    </div>
 
     <p class="callout"><strong>Ponto de atenção:</strong> 63,2% dos ganhos vinham marcados como Morno (N2) — parte inflada por inferência, não por fala real do lead. Isso motivou a correção do "Piso de Evidência" (próximo slide).</p>
 
@@ -642,26 +631,23 @@
     e.preventDefault();
   }, { passive: false });
 
-  // ---- Qualificação: barras 100% empilhadas por status (segmento = temperatura) ----
+  // ---- Qualificação: um donut por status, segmentos = temperatura ----
   var TEMPS = [
-    { key: 'frio', label: 'Frio (N1)', color: 'var(--temp-frio)', text: '#000000' },
-    { key: 'morno', label: 'Morno (N2)', color: 'var(--temp-morno)', text: '#000000' },
-    { key: 'quente', label: 'Quente (N3)', color: 'var(--temp-quente)', text: '#FFFFFF' },
-    { key: 'none', label: 'Não informado', color: 'var(--temp-none)', text: '#000000' }
+    { key: 'frio', label: 'Frio (N1)', color: 'var(--temp-frio)' },
+    { key: 'morno', label: 'Morno (N2)', color: 'var(--temp-morno)' },
+    { key: 'quente', label: 'Quente (N3)', color: 'var(--temp-quente)' },
+    { key: 'none', label: 'Não informado', color: 'var(--temp-none)' }
   ];
   var qualData = [
     { status: 'Ganho', n: 288, share: '20,7% do funil', vals: [21.5, 63.2, 14.2, 1.0], dot: 'var(--status-ganho)' },
     { status: 'Aberto', n: 302, share: '21,7% do funil', vals: [28.5, 2.3, 0.3, 68.9], dot: 'var(--status-aberto)', dotBorder: 'var(--status-aberto-border)' },
     { status: 'Perdido', n: 801, share: '57,6% do funil', vals: [31.7, 4.4, 0.2, 63.7], dot: 'var(--status-perdido)' }
   ];
-  var INLINE_THRESHOLD = 8;   // % — abaixo disso o rótulo vira um callout externo
-  var TIER_GAP_PCT = 7;       // distância mínima (%) entre callouts para não empilhar em níveis diferentes
-  var TIER_STEP_REM = 1.55;   // espaço vertical entre níveis de callout
-  var BASE_BOTTOM_REM = 3.1;  // distância do 1º nível até a barra
 
   var qualEl = document.getElementById('qualChart');
   qualData.forEach(function (row) {
-    var rowEl = document.createElement('div');
+    var col = document.createElement('div');
+    col.className = 'qual-col';
 
     var head = document.createElement('div');
     head.className = 'qual-row-head';
@@ -672,56 +658,48 @@
     var statusEl = document.createElement('span');
     statusEl.className = 'qual-row-status';
     statusEl.textContent = row.status;
-    var metaEl = document.createElement('span');
-    metaEl.className = 'qual-row-meta';
-    metaEl.textContent = row.n + ' negócios · ' + row.share;
     head.appendChild(dotEl);
     head.appendChild(statusEl);
-    head.appendChild(metaEl);
-    rowEl.appendChild(head);
+    col.appendChild(head);
 
-    var wrap = document.createElement('div');
-    wrap.className = 'qual-bar-wrap';
-    var bar = document.createElement('div');
-    bar.className = 'qual-bar';
-
+    var donut = document.createElement('div');
+    donut.className = 'donut';
     var cumulative = 0;
-    var lastCalloutLeft = null;
-    var lastTier = -1;
+    var stops = row.vals.map(function (v, i) {
+      var from = cumulative;
+      cumulative += v;
+      var stop = TEMPS[i].color + ' ' + from + '% ' + cumulative + '%';
+      return stop;
+    });
+    donut.style.background = 'conic-gradient(' + stops.join(', ') + ')';
+
+    var hole = document.createElement('div');
+    hole.className = 'donut-hole';
+    var countEl = document.createElement('div');
+    countEl.className = 'donut-count';
+    countEl.textContent = row.n;
+    var shareEl = document.createElement('div');
+    shareEl.className = 'donut-share';
+    shareEl.textContent = row.share;
+    hole.appendChild(countEl);
+    hole.appendChild(shareEl);
+    donut.appendChild(hole);
+    col.appendChild(donut);
+
+    var list = document.createElement('div');
+    list.className = 'temp-list';
     row.vals.forEach(function (v, i) {
       var temp = TEMPS[i];
-      var seg = document.createElement('div');
-      seg.className = 'qual-seg';
-      seg.style.width = v + '%';
-      seg.style.background = temp.color;
-      seg.style.color = temp.text;
-      seg.title = temp.label + ': ' + v.toFixed(1) + '%';
-
-      if (v >= INLINE_THRESHOLD) {
-        var label = document.createElement('span');
-        label.className = 'qual-seg-label';
-        label.textContent = v.toFixed(1) + '%';
-        seg.appendChild(label);
-      } else {
-        var left = cumulative + v / 2;
-        var tier = (lastCalloutLeft !== null && (left - lastCalloutLeft) < TIER_GAP_PCT) ? lastTier + 1 : 0;
-        lastCalloutLeft = left;
-        lastTier = tier;
-
-        var callout = document.createElement('div');
-        callout.className = 'qual-callout';
-        callout.style.left = left + '%';
-        callout.style.bottom = (BASE_BOTTOM_REM + tier * TIER_STEP_REM) + 'rem';
-        callout.innerHTML = '<span class="dot" style="background:' + temp.color + '"></span><span>' + temp.label.split(' ')[0] + ' ' + v.toFixed(1) + '%</span>';
-        wrap.appendChild(callout);
-      }
-      cumulative += v;
-      bar.appendChild(seg);
+      var line = document.createElement('div');
+      line.className = 'temp-list-row';
+      line.innerHTML = '<span class="dot" style="background:' + temp.color + '"></span>' +
+        '<span class="temp-list-label">' + temp.label + '</span>' +
+        '<span class="temp-list-val">' + v.toFixed(1) + '%</span>';
+      list.appendChild(line);
     });
+    col.appendChild(list);
 
-    wrap.appendChild(bar);
-    rowEl.appendChild(wrap);
-    qualEl.appendChild(rowEl);
+    qualEl.appendChild(col);
   });
 })();
 </script>
