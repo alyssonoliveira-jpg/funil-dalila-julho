@@ -1,0 +1,638 @@
+<title>Visão do Funil — Dalila SDR</title>
+<style>
+  :root {
+    --primary: #FCBA28;
+    --primary-ink: #000000;
+    --bg: #FFFFFF;
+    --bg-dark: #0E0E0E;
+    --surface: #F5F5F5;
+    --card: #FFFFFF;
+    --border: #E1E1E1;
+    --ink: #121212;
+    --muted: #6B6B6B;
+    --muted-2: #8C8C8C;
+    --slate: #8C8C8C;
+    --charcoal: #2B2B2B;
+    --font-sans: -apple-system, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    --font-display: -apple-system, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #131313;
+    --surface: #1B1B1B;
+    --card: #1E1E1E;
+    --border: #2E2E2E;
+    --ink: #F2F2F2;
+    --muted: #A6A6A6;
+    --muted-2: #8C8C8C;
+    --slate: #9A9A9A;
+    --charcoal: #B8B8B8;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #131313;
+      --surface: #1B1B1B;
+      --card: #1E1E1E;
+      --border: #2E2E2E;
+      --ink: #F2F2F2;
+      --muted: #A6A6A6;
+      --muted-2: #8C8C8C;
+      --slate: #9A9A9A;
+      --charcoal: #B8B8B8;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+  body { overflow-x: hidden; }
+
+  .deck {
+    display: flex;
+    flex-direction: row;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+  .slide {
+    scroll-snap-align: start;
+    flex: none;
+    height: 100vh;
+    width: 100vw;
+    padding: 5.5vh 7vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    position: relative;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+  }
+  .slide.dark {
+    background: var(--bg-dark);
+    color: #F4F4F4;
+  }
+  .slide.dark .muted-on-dark { color: #A8A8A8; }
+  .slide-inner {
+    margin: auto 0;
+    width: 100%;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary-ink);
+    background: var(--primary);
+    padding: 0.32em 0.9em;
+    border-radius: 999px;
+    width: fit-content;
+    margin-bottom: 1.1rem;
+  }
+  .eyebrow.outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--ink);
+  }
+  .badge-row { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1.1rem; flex-wrap: wrap; }
+
+  h1.slide-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 0.3rem 0;
+  }
+  .slide-subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    margin: 0 0 2rem 0;
+    max-width: 62ch;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.1rem;
+    margin-bottom: 1.8rem;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.3rem 1.3rem 1.1rem;
+  }
+  .stat-dot { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 0.7rem; }
+  .stat-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+
+  .propbar { display: flex; height: 46px; border-radius: 8px; overflow: hidden; border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--border); }
+  .propbar > div { display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: #000; }
+  .propbar-labels { display: flex; margin-top: 0.5rem; }
+  .propbar-labels > div { font-size: 0.78rem; font-weight: 600; text-align: center; color: var(--muted); }
+
+  .callout {
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 78ch;
+    line-height: 1.5;
+    margin-top: 1.6rem;
+  }
+  .callout b, .callout strong { color: var(--ink); }
+
+  .chart { display: flex; align-items: flex-end; gap: 2.2rem; height: 230px; padding: 0 0.5rem; }
+  .chart-group { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; flex: 1; height: 100%; justify-content: flex-end; }
+  .chart-bars { display: flex; align-items: flex-end; gap: 0.35rem; height: 190px; }
+  .chart-bar { width: 20px; border-radius: 4px 4px 0 0; position: relative; }
+  .chart-bar .val {
+    position: absolute; top: -1.3rem; left: 50%; transform: translateX(-50%);
+    font-size: 0.68rem; font-weight: 700; white-space: nowrap; font-family: var(--font-mono);
+  }
+  .chart-cat { font-size: 0.78rem; color: var(--muted); font-weight: 600; text-align: center; }
+  .legend { display: flex; gap: 1.4rem; justify-content: center; margin-top: 1.2rem; }
+  .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
+
+  .hbar-row { display: grid; grid-template-columns: 190px 1fr 3.2rem; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem; }
+  .hbar-label { font-size: 0.85rem; color: var(--ink); }
+  .hbar-track { background: var(--surface); border-radius: 4px; height: 14px; overflow: hidden; }
+  .hbar-fill { height: 100%; border-radius: 4px; }
+  .hbar-val { font-family: var(--font-mono); font-size: 0.82rem; text-align: right; color: var(--muted); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+  .card.on-white { background: var(--card); }
+  .card h3 { font-size: 1rem; margin: 0 0 0.7rem 0; }
+  .card p { font-size: 0.9rem; color: var(--muted); line-height: 1.55; margin: 0 0 0.8rem 0; }
+  .card p:last-child { margin-bottom: 0; }
+  .card .example {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted-2); margin-bottom: 0.35rem;
+  }
+  .card .example-text { font-style: italic; font-size: 0.95rem; color: var(--ink); }
+
+  .impact-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.85rem; }
+  .impact-list li { display: flex; gap: 0.6rem; font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+  .impact-list li::before {
+    content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--primary); margin-top: 0.45rem;
+  }
+
+  .cause-row {
+    display: flex; align-items: flex-start; gap: 1rem;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 1rem 1.2rem; margin-bottom: 0.7rem;
+  }
+  .cause-num {
+    flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; color: #000;
+  }
+  .cause-body { flex: 1; }
+  .cause-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .cause-text { font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
+  .cause-status {
+    flex: none; font-size: 0.72rem; font-weight: 700; padding: 0.3em 0.8em; border-radius: 999px; white-space: nowrap; align-self: center;
+  }
+  .cause-status.done { background: var(--primary); color: #000; }
+  .cause-status.pending { background: transparent; border: 1px solid var(--border); color: var(--ink); }
+
+  .footer-tag {
+    position: absolute; bottom: 2.2vh; left: 7vw; right: 7vw;
+    display: flex; justify-content: space-between;
+    font-size: 0.72rem; color: var(--muted-2);
+  }
+
+  .nav-dots {
+    position: fixed; left: 50%; bottom: 1.4rem; transform: translateX(-50%);
+    display: flex; flex-direction: row; gap: 0.55rem; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    padding: 0.5rem 0.7rem; border-radius: 999px;
+    backdrop-filter: blur(6px);
+  }
+  .nav-dots button {
+    width: 8px; height: 8px; border-radius: 50%; border: none; background: var(--border);
+    cursor: pointer; padding: 0; transition: background 0.2s, transform 0.2s;
+  }
+  .nav-dots button.active { background: var(--primary); transform: scale(1.3); }
+  .nav-dots button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+  .nav-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid var(--border); background: color-mix(in srgb, var(--bg) 85%, transparent);
+    color: var(--ink); font-size: 1.1rem; cursor: pointer; z-index: 20;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, opacity 0.2s;
+  }
+  .nav-arrow:hover { background: var(--primary); border-color: var(--primary); }
+  .nav-arrow:disabled { opacity: 0.25; cursor: default; }
+  .nav-arrow:disabled:hover { background: color-mix(in srgb, var(--bg) 85%, transparent); border-color: var(--border); }
+  .nav-arrow.prev { left: 1.2rem; }
+  .nav-arrow.next { right: 1.2rem; }
+  .nav-arrow:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+  .slide-counter {
+    position: fixed; top: 1.4rem; right: 1.6rem; z-index: 20;
+    font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    font-size: 0.78rem; color: var(--muted);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    padding: 0.35rem 0.7rem; border-radius: 999px;
+  }
+
+  @media (max-width: 820px) {
+    .nav-arrow { width: 36px; height: 36px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .deck { scroll-behavior: auto; }
+    .nav-dots button { transition: none; }
+  }
+
+  @media (max-width: 820px) {
+    .stat-grid, .two-col { grid-template-columns: 1fr; }
+    .chart { gap: 1rem; }
+    .nav-arrow.prev { left: 0.5rem; }
+    .nav-arrow.next { right: 0.5rem; }
+    .hbar-row { grid-template-columns: 120px 1fr 2.6rem; }
+  }
+</style>
+
+<button class="nav-arrow prev" id="prevBtn" aria-label="Slide anterior">&#8592;</button>
+<button class="nav-arrow next" id="nextBtn" aria-label="Próximo slide">&#8594;</button>
+<div class="slide-counter" id="slideCounter">1 / 10</div>
+<div class="nav-dots" id="navDots"></div>
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 — CAPA -->
+  <section class="slide dark">
+    <div class="slide-inner">
+    <div style="font-family:var(--font-display);font-weight:700;letter-spacing:0.18em;font-size:0.85rem;color:var(--primary);margin-bottom:2rem;">BLIPS</div>
+    <h1 style="font-family:var(--font-display);font-size:clamp(2.1rem,5vw,3.6rem);font-weight:700;letter-spacing:-0.02em;max-width:16ch;text-wrap:balance;margin:0 0 0.8rem 0;">Visão do Funil — Dalila SDR</h1>
+    <p style="font-size:1.15rem;color:#CFCFCF;max-width:58ch;margin:0 0 2.2rem 0;">Julho 2026 · Melhorias por status do funil (Ganhos, Abertos e Perdidos)</p>
+    <div style="width:44px;height:5px;background:var(--primary);border-radius:3px;margin-bottom:0.9rem;"></div>
+    <p style="font-size:0.9rem;color:#8F8F8F;margin:0;">1.391 negócios analisados no período</p>
+  </div>
+  </section>
+
+  <!-- SLIDE 2 — FUNIL GERAL -->
+  <section class="slide">
+    <div class="slide-inner">
+    <span class="eyebrow">Visão geral</span>
+    <h1 class="slide-title">Funil da Dalila — Julho</h1>
+    <p class="slide-subtitle">Distribuição dos 1.391 negócios por status</p>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-dot" style="background:var(--primary)"></div><div class="stat-value">288</div><div class="stat-label">Ganhos — 20,7%</div></div>
+      <div class="stat-card"><div class="stat-dot" style="background:var(--slate)"></div><div class="stat-value">302</div><div class="stat-label">Abertos — 21,7%</div></div>
+      <div class="stat-card"><div class="stat-dot" style="background:var(--charcoal)"></div><div class="stat-value">801</div><div class="stat-label">Perdidos — 57,6%</div></div>
+    </div>
+
+    <div class="propbar">
+      <div style="width:20.7%;background:var(--primary);">Ganho</div>
+      <div style="width:21.7%;background:var(--slate);color:#fff;">Aberto</div>
+      <div style="width:57.6%;background:var(--charcoal);color:#fff;">Perdido</div>
+    </div>
+
+    <p class="callout"><strong>Leitura:</strong> 57,6% do funil ainda se perde antes de qualificar de verdade, e 21,7% fica aberto — são essas duas fatias que concentram as melhorias deste material. A fatia de ganhos (20,7%) é onde a assertividade da pontuação foi corrigida.</p>
+
+    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
+  </div>
+  </section>
+
+  <!-- SLIDE 3 — QUALIFICAÇÃO -->
+  <section class="slide">
+    <div class="slide-inner">
+    <span class="eyebrow">Qualificação</span>
+    <h1 class="slide-title">Visão de Qualificação (Temperatura)</h1>
+    <p class="slide-subtitle">Frio = N1 · Morno = N2 · Quente = N3 — distribuição dentro de cada status</p>
+
+    <div class="chart" id="qualChart"></div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--primary)"></span>Ganho</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--slate)"></span>Aberto</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--charcoal)"></span>Perdido</div>
+    </div>
+
+    <p class="callout"><strong>Ponto de atenção:</strong> 63,2% dos ganhos vinham marcados como Morno (N2) — parte inflada por inferência, não por fala real do lead. Isso motivou a correção do "Piso de Evidência" (próximo slide).</p>
+
+    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
+  </div>
+  </section>
+
+  <!-- SLIDE 4 — DIVISOR -->
+  <section class="slide dark">
+    <div class="slide-inner">
+    <div style="width:44px;height:5px;background:var(--primary);border-radius:3px;margin-bottom:1.1rem;"></div>
+    <h1 style="font-family:var(--font-display);font-size:clamp(1.9rem,4.4vw,3rem);font-weight:700;color:#fff;margin:0 0 0.6rem 0;">Melhorias por status do funil</h1>
+    <p style="font-size:1.05rem;color:#B5B5B5;margin:0;">Ganhos → Abertos → Perdidos (números)</p>
+  </div>
+  </section>
+
+  <!-- SLIDE 5 — GANHOS DIAGNÓSTICO -->
+  <section class="slide">
+    <div class="slide-inner">
+    <span class="eyebrow">Ganhos</span>
+    <h1 class="slide-title">Ganhos — o problema na qualificação</h1>
+    <p class="slide-subtitle">288 negócios (20,7% do funil)</p>
+
+    <div class="card on-white" style="margin-bottom:1rem;">
+      <h3>Identificação do erro</h3>
+      <p>Grande parte dos leads ganhos era qualificada de forma pouco assertiva: a Dalila pontuava por interpretação (dados de cadastro, funil ou inferência), e não pelo que o cliente realmente dizia. A trava de "só conta a fala do lead" existia apenas na etapa de Valor — Interesse, Estrutura e Prazo ficavam livres para inflar a pontuação.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:1.2rem;">
+      <div class="example">Exemplo real</div>
+      <div class="example-text">Lead que só disse "CPF" e "Obrigado" chegou classificado como N2 · 2 pontos · 40% — quando o real era N1 · 0 ponto.</div>
+    </div>
+
+    <p class="callout"><strong>Reflexo nos dados:</strong> dentro dos 288 ganhos, 63,2% estavam marcados como Morno (N2) contra apenas 14,2% Quente (N3) — proporção que a correção de piso de evidência passa a validar fala a fala.</p>
+
+    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
+  </div>
+  </section>
+
+  <!-- SLIDE 6 — GANHOS MELHORIA -->
+  <section class="slide">
+    <div class="slide-inner">
+    <div class="badge-row">
+      <span class="eyebrow">Ganhos</span>
+      <span class="eyebrow" style="background:var(--primary);color:#000;">✅ Aplicado</span>
+    </div>
+    <h1 class="slide-title" style="margin-bottom:2rem;">Melhoria: Piso de Evidência na Pontuação</h1>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>O que foi feito</h3>
+        <p>Criado um piso de evidência válido para as 5 etapas de pontuação: cada etapa começa em 0 e só vira 1 ponto com fala explícita do próprio lead.</p>
+        <p><strong>Sem fala que sustente</strong> → 0 ponto + "Não informado".</p>
+        <p>Estar no funil ou ter dado CPF/CNPJ não conta como interesse nem como aceite.</p>
+        <p style="font-style:italic;font-size:0.82rem;">Etapas afetadas: Interesse, Estrutura, Valor, Prazo e Documentos.</p>
+      </div>
+      <div class="card on-white">
+        <h3>Impacto da correção</h3>
+        <ul class="impact-list">
+          <li>Temperatura (N1/N2/N3) passa a refletir a realidade → transbordo no timing certo.</li>
+          <li>Card de handoff confiável → vendedor prioriza os leads certos.</li>
+          <li>Fim do "recebi um N2 e o cliente mal falou comigo".</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
+  </div>
+  </section>
+
+  <!-- SLIDE 7 — ABERTOS DIAGNÓSTICO -->
+  <section class="slide">
+    <div class="slide-inner">
+    <span class="eyebrow" style="background:var(--slate);color:#000;">Abertos</span>
+    <h1 class="slide-title">Abertos — onde os leads estão travando</h1>
+    <p class="slide-subtitle">302 negócios (21,7% do funil)</p>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-dot" style="background:var(--slate)"></div><div class="stat-value">44,7%</div><div class="stat-label">Presos em Contato Inicial</div></div>
+      <div class="stat-card"><div class="stat-dot" style="background:var(--slate)"></div><div class="stat-value">22,8%</div><div class="stat-label">Qualificado N1 sem avanço</div></div>
+      <div class="stat-card"><div class="stat-dot" style="background:var(--charcoal)"></div><div class="stat-value">0,3%</div><div class="stat-label">Foram transferidos ao vendedor</div></div>
+    </div>
+
+    <p style="font-size:0.92rem;color:var(--muted);margin-bottom:1.2rem;max-width:80ch;">De 302 negócios abertos, apenas 1 foi de fato transferido para o vendedor — os outros 301 seguem presos no funil da Dalila. As causas identificadas:</p>
+
+    <div class="cause-row">
+      <div class="cause-num">1</div>
+      <div class="cause-body"><div class="cause-title">Erro na ativação do FUP</div><div class="cause-text">Falha no início do mês: o follow-up automático não estava sendo disparado corretamente. Já corrigido pelo Netto.</div></div>
+      <div class="cause-status done">Corrigido</div>
+    </div>
+    <div class="cause-row">
+      <div class="cause-num">2</div>
+      <div class="cause-body"><div class="cause-title">Limite de template / janela anti-spam do Hyperflow</div><div class="cause-text">O follow não completava por restrição de template e janela do Hyperflow. Ação: quando esse erro ocorrer, o Netto transfere o lead direto ao vendedor para não ficar preso.</div></div>
+      <div class="cause-status done">Corrigido</div>
+    </div>
+    <div class="cause-row">
+      <div class="cause-num">3</div>
+      <div class="cause-body"><div class="cause-title">Regra das 2h não sendo aplicada na prática</div><div class="cause-text">Após a Dalila apresentar o valor (Q2), se o lead some por 2h ela deveria transferir ao vendedor — mas a classificação como "open" anulava a regra. Detalhado no próximo slide.</div></div>
+      <div class="cause-status pending">Em correção</div>
+    </div>
+
+    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
+  </div>
+  </section>
+
+  <!-- SLIDE 8 — ABERTOS MELHORIA -->
+  <section class="slide">
+    <div class="slide-inner">
+    <div class="badge-row">
+      <span class="eyebrow" style="background:var(--slate);color:#000;">Abertos</span>
+      <span class="eyebrow outline">🟡 Proposto</span>
+    </div>
+    <h1 class="slide-title" style="margin-bottom:1.6rem;">Melhoria: Desambiguação Q2 — "open" vs "won"</h1>
+
+    <div class="card on-white" style="margin-bottom:1rem;">
+      <h3>Identificação do erro</h3>
+      <p>Quando o lead via o valor (Q2) e sumia, o sistema classificava como "open" (N2 em nutrição) e mantinha em follow-up com a Dalila. Resultado: o lead mais quente que existe — o que já viu o preço — ficava preso no funil e nunca chegava ao vendedor. A regra de transbordo em 2h já existia; o gap era a classificação cair em "open" e anular a regra na prática.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:1.2rem;">
+      <div class="example">Exemplo real</div>
+      <div class="example-text">Lead Dheinifer (deal 620136) travou 5 dias nessa situação, sem chegar ao vendedor.</div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>O que foi feito</h3>
+        <p>Parar na Q2 vira gatilho explícito de transbordo: N2/aprovado que viu o valor e parou por +2h → status "won" (vendedor), nunca "open". O "open" passa a valer só para quem ainda não chegou na Q2.</p>
+      </div>
+      <div class="card on-white">
+        <h3>Impacto esperado</h3>
+        <ul class="impact-list">
+          <li>Lead que viu o preço e sumiu é entregue ao vendedor no timing certo.</li>
+          <li>Card sai como "won" → automação roteia certo ao vendedor.</li>
+          <li>Menos oportunidade perdida no lead de maior intenção.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
+  </div>
+  </section>
+
+  <!-- SLIDE 9 — PERDIDOS NÚMEROS -->
+  <section class="slide">
+    <div class="slide-inner">
+    <span class="eyebrow" style="background:var(--charcoal);color:#fff;">Perdidos</span>
+    <h1 class="slide-title">Perdidos — números do período</h1>
+    <p class="slide-subtitle">801 negócios (57,6% do funil) · sem plano de melhoria detalhado neste material</p>
+
+    <div class="two-col">
+      <div>
+        <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Principais motivos</h3>
+        <div class="hbar-row"><div class="hbar-label">Sem retorno</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--charcoal)"></div></div><div class="hbar-val">464</div></div>
+        <div class="hbar-row"><div class="hbar-label">Whatsapp inválido</div><div class="hbar-track"><div class="hbar-fill" style="width:37%;background:var(--charcoal)"></div></div><div class="hbar-val">173</div></div>
+        <div class="hbar-row"><div class="hbar-label">Perdido em N1 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:19%;background:var(--charcoal)"></div></div><div class="hbar-val">88</div></div>
+        <div class="hbar-row"><div class="hbar-label">Recadastro</div><div class="hbar-track"><div class="hbar-fill" style="width:6.5%;background:var(--charcoal)"></div></div><div class="hbar-val">30</div></div>
+        <div class="hbar-row"><div class="hbar-label">Perdido em N2 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:2%;background:var(--charcoal)"></div></div><div class="hbar-val">10</div></div>
+      </div>
+      <div>
+        <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Onde a perda acontece (etapa)</h3>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Contato realizado</span><strong>36,1%</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Qualificado N1</span><strong>31,1%</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Whatsapp inválido</span><strong>22,1%</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Qualificado N2</span><strong>4,6%</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;margin-bottom:1.1rem;"><span>Contato inicial</span><strong>4,2%</strong></div>
+
+        <h3 style="font-size:0.95rem;margin:0 0 0.6rem 0;">Temperatura</h3>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Não informado</span><strong>63,7%</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Frio (N1)</span><strong>31,7%</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Morno (N2)</span><strong>4,4%</strong></div>
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;"><span>Quente (N3)</span><strong>0,2%</strong></div>
+      </div>
+    </div>
+
+    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
+  </div>
+  </section>
+
+  <!-- SLIDE 10 — RESUMO -->
+  <section class="slide dark">
+    <div class="slide-inner">
+    <div style="font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--primary);margin-bottom:0.7rem;">Resumo</div>
+    <h1 style="font-family:var(--font-display);font-size:clamp(1.9rem,4.4vw,2.8rem);font-weight:700;color:#fff;margin:0 0 2rem 0;max-width:20ch;">Foco: destravar Ganhos e Abertos</h1>
+
+    <div style="display:flex;flex-direction:column;gap:1.3rem;max-width:70ch;">
+      <div style="display:flex;gap:1rem;">
+        <div style="flex:none;width:4px;background:var(--primary);border-radius:2px;"></div>
+        <div><div style="color:var(--primary);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Ganhos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">Piso de evidência aplicado — qualificação passa a refletir a fala real do lead.</div></div>
+      </div>
+      <div style="display:flex;gap:1rem;">
+        <div style="flex:none;width:4px;background:var(--primary);border-radius:2px;"></div>
+        <div><div style="color:var(--primary);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Abertos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">FUP e janela do Hyperflow corrigidos pelo Netto; falta consolidar a desambiguação Q2 (open vs won) para destravar os 301 leads parados.</div></div>
+      </div>
+      <div style="display:flex;gap:1rem;">
+        <div style="flex:none;width:4px;background:var(--primary);border-radius:2px;"></div>
+        <div><div style="color:var(--primary);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Perdidos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">57,6% do funil — maior parte por falta de retorno; sem plano de melhoria detalhado neste material.</div></div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var navDots = document.getElementById('navDots');
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var counter = document.getElementById('slideCounter');
+
+  slides.forEach(function (s, i) {
+    var b = document.createElement('button');
+    b.setAttribute('aria-label', 'Ir para slide ' + (i + 1));
+    b.addEventListener('click', function () { s.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' }); });
+    navDots.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(navDots.children);
+
+  function currentIndex() {
+    var mid = deck.scrollLeft + deck.clientWidth / 2;
+    var idx = 0;
+    slides.forEach(function (s, i) {
+      if (s.offsetLeft <= mid) idx = i;
+    });
+    return idx;
+  }
+
+  function goTo(idx) {
+    idx = Math.max(0, Math.min(slides.length - 1, idx));
+    slides[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+  }
+
+  function updateActive() {
+    var idx = currentIndex();
+    dots.forEach(function (d, i) { d.classList.toggle('active', i === idx); });
+    counter.textContent = (idx + 1) + ' / ' + slides.length;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === slides.length - 1;
+  }
+  deck.addEventListener('scroll', updateActive);
+  updateActive();
+
+  prevBtn.addEventListener('click', function () { goTo(currentIndex() - 1); });
+  nextBtn.addEventListener('click', function () { goTo(currentIndex() + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (['ArrowRight', 'ArrowDown', 'PageDown'].indexOf(e.key) !== -1) {
+      goTo(currentIndex() + 1);
+      e.preventDefault();
+    } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].indexOf(e.key) !== -1) {
+      goTo(currentIndex() - 1);
+      e.preventDefault();
+    }
+  });
+
+  // Trackpads/mice send vertical wheel deltas by default — redirect to horizontal paging.
+  deck.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      deck.scrollLeft += e.deltaY;
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // ---- Qualificação grouped bar chart ----
+  var chartData = [
+    { cat: 'Frio (N1)', vals: [21.5, 28.5, 31.7] },
+    { cat: 'Morno (N2)', vals: [63.2, 2.3, 4.4] },
+    { cat: 'Quente (N3)', vals: [14.2, 0.3, 0.2] },
+    { cat: 'Não informado', vals: [1.0, 68.9, 63.7] }
+  ];
+  var colors = ['var(--primary)', 'var(--slate)', 'var(--charcoal)'];
+  var chartEl = document.getElementById('qualChart');
+  var maxVal = 70;
+  chartData.forEach(function (g) {
+    var group = document.createElement('div');
+    group.className = 'chart-group';
+    var bars = document.createElement('div');
+    bars.className = 'chart-bars';
+    g.vals.forEach(function (v, i) {
+      var bar = document.createElement('div');
+      bar.className = 'chart-bar';
+      bar.style.height = Math.max(4, (v / maxVal) * 190) + 'px';
+      bar.style.background = colors[i];
+      var val = document.createElement('span');
+      val.className = 'val';
+      val.textContent = v.toFixed(1) + '%';
+      val.style.color = 'var(--ink)';
+      bar.appendChild(val);
+      bars.appendChild(bar);
+    });
+    group.appendChild(bars);
+    var cat = document.createElement('div');
+    cat.className = 'chart-cat';
+    cat.textContent = g.cat;
+    group.appendChild(cat);
+    chartEl.appendChild(group);
+  });
+})();
+</script>
