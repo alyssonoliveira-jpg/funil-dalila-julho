@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Visão do Funil — Dalila SDR</title>
 <style>
   :root {
@@ -13,6 +15,10 @@
     --muted-2: #8C8C8C;
     --slate: #8C8C8C;
     --charcoal: #2B2B2B;
+    --temp-frio: #7C93A8;
+    --temp-morno: #FCBA28;
+    --temp-quente: #D6491E;
+    --temp-none: #D9D9D9;
     --font-sans: -apple-system, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
     --font-display: -apple-system, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, "Cascadia Code", "JetBrains Mono", Consolas, monospace;
@@ -159,16 +165,33 @@
   }
   .callout b, .callout strong { color: var(--ink); }
 
-  .chart { display: flex; align-items: flex-end; gap: 2.2rem; height: 230px; padding: 0 0.5rem; }
-  .chart-group { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; flex: 1; height: 100%; justify-content: flex-end; }
-  .chart-bars { display: flex; align-items: flex-end; gap: 0.35rem; height: 190px; }
-  .chart-bar { width: 20px; border-radius: 4px 4px 0 0; position: relative; }
-  .chart-bar .val {
-    position: absolute; top: -1.3rem; left: 50%; transform: translateX(-50%);
-    font-size: 0.68rem; font-weight: 700; white-space: nowrap; font-family: var(--font-mono);
+  .qual-chart { display: flex; flex-direction: column; gap: 1.9rem; padding: 0.6rem 0 0.4rem; }
+  .qual-row-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.55rem; }
+  .qual-row-status { font-size: 1rem; font-weight: 700; color: var(--ink); }
+  .qual-row-meta { font-size: 0.82rem; color: var(--muted); font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .qual-bar-wrap { position: relative; padding-top: 5rem; }
+  .qual-bar {
+    display: flex; height: 44px; border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border);
   }
-  .chart-cat { font-size: 0.78rem; color: var(--muted); font-weight: 600; text-align: center; }
-  .legend { display: flex; gap: 1.4rem; justify-content: center; margin-top: 1.2rem; }
+  .qual-seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.78rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    border-right: 1px solid color-mix(in srgb, var(--bg) 35%, transparent);
+    position: relative; min-width: 0;
+  }
+  .qual-seg:last-child { border-right: none; }
+  .qual-seg .qual-seg-label { padding: 0 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: clip; }
+  .qual-callout {
+    position: absolute; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 0.35em;
+    font-size: 0.74rem; font-weight: 700; font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+    color: var(--ink); white-space: nowrap;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 0.18rem 0.55rem; border-radius: 999px;
+  }
+  .qual-callout .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .legend { display: flex; gap: 1.4rem; justify-content: center; margin-top: 0.4rem; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; color: var(--muted); }
   .legend-swatch { width: 10px; height: 10px; border-radius: 2px; }
 
@@ -219,9 +242,9 @@
   .cause-status.pending { background: transparent; border: 1px solid var(--border); color: var(--ink); }
 
   .footer-tag {
-    position: absolute; bottom: 2.2vh; left: 7vw; right: 7vw;
     display: flex; justify-content: space-between;
     font-size: 0.72rem; color: var(--muted-2);
+    margin-top: 2.2rem;
   }
 
   .nav-dots {
@@ -328,11 +351,12 @@
     <h1 class="slide-title">Visão de Qualificação (Temperatura)</h1>
     <p class="slide-subtitle">Frio = N1 · Morno = N2 · Quente = N3 — distribuição dentro de cada status</p>
 
-    <div class="chart" id="qualChart"></div>
+    <div class="qual-chart" id="qualChart"></div>
     <div class="legend">
-      <div class="legend-item"><span class="legend-swatch" style="background:var(--primary)"></span>Ganho</div>
-      <div class="legend-item"><span class="legend-swatch" style="background:var(--slate)"></span>Aberto</div>
-      <div class="legend-item"><span class="legend-swatch" style="background:var(--charcoal)"></span>Perdido</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-frio)"></span>Frio (N1)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-morno)"></span>Morno (N2)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-quente)"></span>Quente (N3)</div>
+      <div class="legend-item"><span class="legend-swatch" style="background:var(--temp-none)"></span>Não informado</div>
     </div>
 
     <p class="callout"><strong>Ponto de atenção:</strong> 63,2% dos ganhos vinham marcados como Morno (N2) — parte inflada por inferência, não por fala real do lead. Isso motivou a correção do "Piso de Evidência" (próximo slide).</p>
@@ -592,47 +616,99 @@
     }
   });
 
-  // Trackpads/mice send vertical wheel deltas by default — redirect to horizontal paging.
+  // Trackpads/mice send vertical wheel deltas by default — redirect to horizontal paging,
+  // but let a tall slide scroll internally first (only page once it hits top/bottom).
   deck.addEventListener('wheel', function (e) {
-    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-      deck.scrollLeft += e.deltaY;
-      e.preventDefault();
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+
+    var activeSlide = slides[currentIndex()];
+    var hasOverflow = activeSlide.scrollHeight > activeSlide.clientHeight + 1;
+    if (hasOverflow) {
+      var atTop = activeSlide.scrollTop <= 0;
+      var atBottom = activeSlide.scrollTop + activeSlide.clientHeight >= activeSlide.scrollHeight - 1;
+      var scrollingDown = e.deltaY > 0;
+      if ((scrollingDown && !atBottom) || (!scrollingDown && !atTop)) return;
     }
+
+    deck.scrollLeft += e.deltaY;
+    e.preventDefault();
   }, { passive: false });
 
-  // ---- Qualificação grouped bar chart ----
-  var chartData = [
-    { cat: 'Frio (N1)', vals: [21.5, 28.5, 31.7] },
-    { cat: 'Morno (N2)', vals: [63.2, 2.3, 4.4] },
-    { cat: 'Quente (N3)', vals: [14.2, 0.3, 0.2] },
-    { cat: 'Não informado', vals: [1.0, 68.9, 63.7] }
+  // ---- Qualificação: barras 100% empilhadas por status (segmento = temperatura) ----
+  var TEMPS = [
+    { key: 'frio', label: 'Frio (N1)', color: 'var(--temp-frio)', text: '#000000' },
+    { key: 'morno', label: 'Morno (N2)', color: 'var(--temp-morno)', text: '#000000' },
+    { key: 'quente', label: 'Quente (N3)', color: 'var(--temp-quente)', text: '#FFFFFF' },
+    { key: 'none', label: 'Não informado', color: 'var(--temp-none)', text: '#000000' }
   ];
-  var colors = ['var(--primary)', 'var(--slate)', 'var(--charcoal)'];
-  var chartEl = document.getElementById('qualChart');
-  var maxVal = 70;
-  chartData.forEach(function (g) {
-    var group = document.createElement('div');
-    group.className = 'chart-group';
-    var bars = document.createElement('div');
-    bars.className = 'chart-bars';
-    g.vals.forEach(function (v, i) {
-      var bar = document.createElement('div');
-      bar.className = 'chart-bar';
-      bar.style.height = Math.max(4, (v / maxVal) * 190) + 'px';
-      bar.style.background = colors[i];
-      var val = document.createElement('span');
-      val.className = 'val';
-      val.textContent = v.toFixed(1) + '%';
-      val.style.color = 'var(--ink)';
-      bar.appendChild(val);
-      bars.appendChild(bar);
+  var qualData = [
+    { status: 'Ganho', n: 288, share: '20,7% do funil', vals: [21.5, 63.2, 14.2, 1.0] },
+    { status: 'Aberto', n: 302, share: '21,7% do funil', vals: [28.5, 2.3, 0.3, 68.9] },
+    { status: 'Perdido', n: 801, share: '57,6% do funil', vals: [31.7, 4.4, 0.2, 63.7] }
+  ];
+  var INLINE_THRESHOLD = 8;   // % — abaixo disso o rótulo vira um callout externo
+  var TIER_GAP_PCT = 7;       // distância mínima (%) entre callouts para não empilhar em níveis diferentes
+  var TIER_STEP_REM = 1.55;   // espaço vertical entre níveis de callout
+  var BASE_BOTTOM_REM = 3.1;  // distância do 1º nível até a barra
+
+  var qualEl = document.getElementById('qualChart');
+  qualData.forEach(function (row) {
+    var rowEl = document.createElement('div');
+
+    var head = document.createElement('div');
+    head.className = 'qual-row-head';
+    var statusEl = document.createElement('span');
+    statusEl.className = 'qual-row-status';
+    statusEl.textContent = row.status;
+    var metaEl = document.createElement('span');
+    metaEl.className = 'qual-row-meta';
+    metaEl.textContent = row.n + ' negócios · ' + row.share;
+    head.appendChild(statusEl);
+    head.appendChild(metaEl);
+    rowEl.appendChild(head);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'qual-bar-wrap';
+    var bar = document.createElement('div');
+    bar.className = 'qual-bar';
+
+    var cumulative = 0;
+    var lastCalloutLeft = null;
+    var lastTier = -1;
+    row.vals.forEach(function (v, i) {
+      var temp = TEMPS[i];
+      var seg = document.createElement('div');
+      seg.className = 'qual-seg';
+      seg.style.width = v + '%';
+      seg.style.background = temp.color;
+      seg.style.color = temp.text;
+      seg.title = temp.label + ': ' + v.toFixed(1) + '%';
+
+      if (v >= INLINE_THRESHOLD) {
+        var label = document.createElement('span');
+        label.className = 'qual-seg-label';
+        label.textContent = v.toFixed(1) + '%';
+        seg.appendChild(label);
+      } else {
+        var left = cumulative + v / 2;
+        var tier = (lastCalloutLeft !== null && (left - lastCalloutLeft) < TIER_GAP_PCT) ? lastTier + 1 : 0;
+        lastCalloutLeft = left;
+        lastTier = tier;
+
+        var callout = document.createElement('div');
+        callout.className = 'qual-callout';
+        callout.style.left = left + '%';
+        callout.style.bottom = (BASE_BOTTOM_REM + tier * TIER_STEP_REM) + 'rem';
+        callout.innerHTML = '<span class="dot" style="background:' + temp.color + '"></span><span>' + temp.label.split(' ')[0] + ' ' + v.toFixed(1) + '%</span>';
+        wrap.appendChild(callout);
+      }
+      cumulative += v;
+      bar.appendChild(seg);
     });
-    group.appendChild(bars);
-    var cat = document.createElement('div');
-    cat.className = 'chart-cat';
-    cat.textContent = g.cat;
-    group.appendChild(cat);
-    chartEl.appendChild(group);
+
+    wrap.appendChild(bar);
+    rowEl.appendChild(wrap);
+    qualEl.appendChild(rowEl);
   });
 })();
 </script>
