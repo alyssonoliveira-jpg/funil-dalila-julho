@@ -19,6 +19,13 @@
     --temp-morno: #FCBA28;
     --temp-quente: #D6491E;
     --temp-none: #D9D9D9;
+    --status-ganho: #1E9E5C;
+    --status-ganho-text: #FFFFFF;
+    --status-perdido: #DC3545;
+    --status-perdido-text: #FFFFFF;
+    --status-aberto: #FFFFFF;
+    --status-aberto-border: #B0B0B0;
+    --status-aberto-text: #000000;
     --font-sans: -apple-system, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
     --font-display: -apple-system, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, "Cascadia Code", "JetBrains Mono", Consolas, monospace;
@@ -327,15 +334,15 @@
     <p class="slide-subtitle">Distribuição dos 1.391 negócios por status</p>
 
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-dot" style="background:var(--primary)"></div><div class="stat-value">288</div><div class="stat-label">Ganhos — 20,7%</div></div>
-      <div class="stat-card"><div class="stat-dot" style="background:var(--slate)"></div><div class="stat-value">302</div><div class="stat-label">Abertos — 21,7%</div></div>
-      <div class="stat-card"><div class="stat-dot" style="background:var(--charcoal)"></div><div class="stat-value">801</div><div class="stat-label">Perdidos — 57,6%</div></div>
+      <div class="stat-card"><div class="stat-dot" style="background:var(--status-ganho)"></div><div class="stat-value">288</div><div class="stat-label">Ganhos — 20,7%</div></div>
+      <div class="stat-card"><div class="stat-dot" style="background:var(--status-aberto);border:1.5px solid var(--status-aberto-border)"></div><div class="stat-value">302</div><div class="stat-label">Abertos — 21,7%</div></div>
+      <div class="stat-card"><div class="stat-dot" style="background:var(--status-perdido)"></div><div class="stat-value">801</div><div class="stat-label">Perdidos — 57,6%</div></div>
     </div>
 
     <div class="propbar">
-      <div style="width:20.7%;background:var(--primary);">Ganho</div>
-      <div style="width:21.7%;background:var(--slate);color:#fff;">Aberto</div>
-      <div style="width:57.6%;background:var(--charcoal);color:#fff;">Perdido</div>
+      <div style="width:20.7%;background:var(--status-ganho);color:#fff;">Ganho</div>
+      <div style="width:21.7%;background:var(--status-aberto);color:#000;">Aberto</div>
+      <div style="width:57.6%;background:var(--status-perdido);color:#fff;">Perdido</div>
     </div>
 
     <p class="callout"><strong>Leitura:</strong> 57,6% do funil ainda se perde antes de qualificar de verdade, e 21,7% fica aberto — são essas duas fatias que concentram as melhorias deste material. A fatia de ganhos (20,7%) é onde a assertividade da pontuação foi corrigida.</p>
@@ -377,7 +384,7 @@
   <!-- SLIDE 5 — GANHOS DIAGNÓSTICO -->
   <section class="slide">
     <div class="slide-inner">
-    <span class="eyebrow">Ganhos</span>
+    <span class="eyebrow" style="background:var(--status-ganho);color:var(--status-ganho-text);">Ganhos</span>
     <h1 class="slide-title">Ganhos — o problema na qualificação</h1>
     <p class="slide-subtitle">288 negócios (20,7% do funil)</p>
 
@@ -401,7 +408,7 @@
   <section class="slide">
     <div class="slide-inner">
     <div class="badge-row">
-      <span class="eyebrow">Ganhos</span>
+      <span class="eyebrow" style="background:var(--status-ganho);color:var(--status-ganho-text);">Ganhos</span>
       <span class="eyebrow" style="background:var(--primary);color:#000;">✅ Aplicado</span>
     </div>
     <h1 class="slide-title" style="margin-bottom:2rem;">Melhoria: Piso de Evidência na Pontuação</h1>
@@ -431,7 +438,7 @@
   <!-- SLIDE 7 — ABERTOS DIAGNÓSTICO -->
   <section class="slide">
     <div class="slide-inner">
-    <span class="eyebrow" style="background:var(--slate);color:#000;">Abertos</span>
+    <span class="eyebrow" style="background:var(--status-aberto);color:var(--status-aberto-text);border:1.5px solid var(--status-aberto-border);">Abertos</span>
     <h1 class="slide-title">Abertos — onde os leads estão travando</h1>
     <p class="slide-subtitle">302 negócios (21,7% do funil)</p>
 
@@ -467,7 +474,7 @@
   <section class="slide">
     <div class="slide-inner">
     <div class="badge-row">
-      <span class="eyebrow" style="background:var(--slate);color:#000;">Abertos</span>
+      <span class="eyebrow" style="background:var(--status-aberto);color:var(--status-aberto-text);border:1.5px solid var(--status-aberto-border);">Abertos</span>
       <span class="eyebrow outline">🟡 Proposto</span>
     </div>
     <h1 class="slide-title" style="margin-bottom:1.6rem;">Melhoria: Desambiguação Q2 — "open" vs "won"</h1>
@@ -504,18 +511,18 @@
   <!-- SLIDE 9 — PERDIDOS NÚMEROS -->
   <section class="slide">
     <div class="slide-inner">
-    <span class="eyebrow" style="background:var(--charcoal);color:#fff;">Perdidos</span>
+    <span class="eyebrow" style="background:var(--status-perdido);color:var(--status-perdido-text);">Perdidos</span>
     <h1 class="slide-title">Perdidos — números do período</h1>
     <p class="slide-subtitle">801 negócios (57,6% do funil) · sem plano de melhoria detalhado neste material</p>
 
     <div class="two-col">
       <div>
         <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Principais motivos</h3>
-        <div class="hbar-row"><div class="hbar-label">Sem retorno</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--charcoal)"></div></div><div class="hbar-val">464</div></div>
-        <div class="hbar-row"><div class="hbar-label">Whatsapp inválido</div><div class="hbar-track"><div class="hbar-fill" style="width:37%;background:var(--charcoal)"></div></div><div class="hbar-val">173</div></div>
-        <div class="hbar-row"><div class="hbar-label">Perdido em N1 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:19%;background:var(--charcoal)"></div></div><div class="hbar-val">88</div></div>
-        <div class="hbar-row"><div class="hbar-label">Recadastro</div><div class="hbar-track"><div class="hbar-fill" style="width:6.5%;background:var(--charcoal)"></div></div><div class="hbar-val">30</div></div>
-        <div class="hbar-row"><div class="hbar-label">Perdido em N2 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:2%;background:var(--charcoal)"></div></div><div class="hbar-val">10</div></div>
+        <div class="hbar-row"><div class="hbar-label">Sem retorno</div><div class="hbar-track"><div class="hbar-fill" style="width:100%;background:var(--status-perdido)"></div></div><div class="hbar-val">464</div></div>
+        <div class="hbar-row"><div class="hbar-label">Whatsapp inválido</div><div class="hbar-track"><div class="hbar-fill" style="width:37%;background:var(--status-perdido)"></div></div><div class="hbar-val">173</div></div>
+        <div class="hbar-row"><div class="hbar-label">Perdido em N1 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:19%;background:var(--status-perdido)"></div></div><div class="hbar-val">88</div></div>
+        <div class="hbar-row"><div class="hbar-label">Recadastro</div><div class="hbar-track"><div class="hbar-fill" style="width:6.5%;background:var(--status-perdido)"></div></div><div class="hbar-val">30</div></div>
+        <div class="hbar-row"><div class="hbar-label">Perdido em N2 (s/ motivo)</div><div class="hbar-track"><div class="hbar-fill" style="width:2%;background:var(--status-perdido)"></div></div><div class="hbar-val">10</div></div>
       </div>
       <div>
         <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Onde a perda acontece (etapa)</h3>
@@ -545,16 +552,16 @@
 
     <div style="display:flex;flex-direction:column;gap:1.3rem;max-width:70ch;">
       <div style="display:flex;gap:1rem;">
-        <div style="flex:none;width:4px;background:var(--primary);border-radius:2px;"></div>
-        <div><div style="color:var(--primary);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Ganhos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">Piso de evidência aplicado — qualificação passa a refletir a fala real do lead.</div></div>
+        <div style="flex:none;width:4px;background:var(--status-ganho);border-radius:2px;"></div>
+        <div><div style="color:var(--status-ganho);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Ganhos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">Piso de evidência aplicado — qualificação passa a refletir a fala real do lead.</div></div>
       </div>
       <div style="display:flex;gap:1rem;">
-        <div style="flex:none;width:4px;background:var(--primary);border-radius:2px;"></div>
-        <div><div style="color:var(--primary);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Abertos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">FUP e janela do Hyperflow corrigidos pelo Netto; falta consolidar a desambiguação Q2 (open vs won) para destravar os 301 leads parados.</div></div>
+        <div style="flex:none;width:4px;background:#FFFFFF;border-radius:2px;"></div>
+        <div><div style="color:#FFFFFF;font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Abertos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">FUP e janela do Hyperflow corrigidos pelo Netto; falta consolidar a desambiguação Q2 (open vs won) para destravar os 301 leads parados.</div></div>
       </div>
       <div style="display:flex;gap:1rem;">
-        <div style="flex:none;width:4px;background:var(--primary);border-radius:2px;"></div>
-        <div><div style="color:var(--primary);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Perdidos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">57,6% do funil — maior parte por falta de retorno; sem plano de melhoria detalhado neste material.</div></div>
+        <div style="flex:none;width:4px;background:var(--status-perdido);border-radius:2px;"></div>
+        <div><div style="color:var(--status-perdido);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Perdidos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">57,6% do funil — maior parte por falta de retorno; sem plano de melhoria detalhado neste material.</div></div>
       </div>
     </div>
   </div>
