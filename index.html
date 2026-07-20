@@ -321,7 +321,7 @@
 
 <button class="nav-arrow prev" id="prevBtn" aria-label="Slide anterior">&#8592;</button>
 <button class="nav-arrow next" id="nextBtn" aria-label="Próximo slide">&#8594;</button>
-<div class="slide-counter" id="slideCounter">1 / 10</div>
+<div class="slide-counter" id="slideCounter">1 / 8</div>
 <div class="nav-dots" id="navDots"></div>
 <div class="chart-tooltip" id="chartTooltip"></div>
 <div class="deck" id="deck">
@@ -386,21 +386,41 @@
   </div>
   </section>
 
-  <!-- SLIDE 5 — GANHOS DIAGNÓSTICO -->
+  <!-- SLIDE 5 — GANHOS: PROBLEMA + MELHORIA -->
   <section class="slide">
     <div class="slide-inner">
-    <span class="eyebrow" style="background:var(--status-ganho);color:var(--status-ganho-text);">Ganhos</span>
-    <h1 class="slide-title">Ganhos — o problema na qualificação</h1>
+    <div class="badge-row">
+      <span class="eyebrow" style="background:var(--status-ganho);color:var(--status-ganho-text);">Ganhos</span>
+      <span class="eyebrow" style="background:var(--primary);color:#000;">✅ Aplicado</span>
+    </div>
+    <h1 class="slide-title">Ganhos — problema identificado e correção aplicada</h1>
     <p class="slide-subtitle">288 negócios (20,7% do funil)</p>
 
-    <div class="card on-white" style="margin-bottom:1rem;">
-      <h3>Identificação do erro</h3>
-      <p>Grande parte dos leads ganhos era qualificada de forma pouco assertiva: a Dalila pontuava por interpretação (dados de cadastro, funil ou inferência), e não pelo que o cliente realmente dizia. A trava de "só conta a fala do lead" existia apenas na etapa de Valor — Interesse, Estrutura e Prazo ficavam livres para inflar a pontuação.</p>
-    </div>
-
-    <div class="card" style="margin-bottom:1.2rem;">
-      <div class="example">Exemplo real</div>
-      <div class="example-text">Lead que só disse "CPF" e "Obrigado" chegou classificado como N2 · 2 pontos · 40% — quando o real era N1 · 0 ponto.</div>
+    <div class="two-col">
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="card on-white">
+          <h3>O problema</h3>
+          <p>A Dalila pontuava por interpretação (dados de cadastro, funil ou inferência), não pelo que o cliente realmente dizia. A trava de "só conta a fala do lead" existia apenas na etapa de Valor — Interesse, Estrutura e Prazo ficavam livres para inflar a pontuação.</p>
+        </div>
+        <div class="card">
+          <div class="example">Exemplo real</div>
+          <div class="example-text">Lead que só disse "CPF" e "Obrigado" chegou classificado como N2 · 2 pontos · 40% — quando o real era N1 · 0 ponto.</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0.9rem;">
+        <div class="card">
+          <h3>Melhoria: Piso de Evidência na Pontuação</h3>
+          <p>Cada uma das 5 etapas de pontuação começa em 0 e só vira 1 ponto com fala explícita do próprio lead. <strong>Sem fala que sustente</strong> → 0 ponto + "Não informado". Estar no funil ou ter dado CPF/CNPJ não conta como interesse nem como aceite.</p>
+        </div>
+        <div class="card on-white">
+          <h3>Impacto da correção</h3>
+          <ul class="impact-list">
+            <li>Temperatura (N1/N2/N3) passa a refletir a realidade → transbordo no timing certo.</li>
+            <li>Card de handoff confiável → vendedor prioriza os leads certos.</li>
+            <li>Fim do "recebi um N2 e o cliente mal falou comigo".</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <p class="callout"><strong>Reflexo nos dados:</strong> dentro dos 288 ganhos, 63,2% estavam marcados como Morno (N2) contra apenas 14,2% Quente (N3) — proporção que a correção de piso de evidência passa a validar fala a fala.</p>
@@ -409,42 +429,11 @@
   </div>
   </section>
 
-  <!-- SLIDE 6 — GANHOS MELHORIA -->
-  <section class="slide">
-    <div class="slide-inner">
-    <div class="badge-row">
-      <span class="eyebrow" style="background:var(--status-ganho);color:var(--status-ganho-text);">Ganhos</span>
-      <span class="eyebrow" style="background:var(--primary);color:#000;">✅ Aplicado</span>
-    </div>
-    <h1 class="slide-title" style="margin-bottom:2rem;">Melhoria: Piso de Evidência na Pontuação</h1>
-
-    <div class="two-col">
-      <div class="card">
-        <h3>O que foi feito</h3>
-        <p>Criado um piso de evidência válido para as 5 etapas de pontuação: cada etapa começa em 0 e só vira 1 ponto com fala explícita do próprio lead.</p>
-        <p><strong>Sem fala que sustente</strong> → 0 ponto + "Não informado".</p>
-        <p>Estar no funil ou ter dado CPF/CNPJ não conta como interesse nem como aceite.</p>
-        <p style="font-style:italic;font-size:0.82rem;">Etapas afetadas: Interesse, Estrutura, Valor, Prazo e Documentos.</p>
-      </div>
-      <div class="card on-white">
-        <h3>Impacto da correção</h3>
-        <ul class="impact-list">
-          <li>Temperatura (N1/N2/N3) passa a refletir a realidade → transbordo no timing certo.</li>
-          <li>Card de handoff confiável → vendedor prioriza os leads certos.</li>
-          <li>Fim do "recebi um N2 e o cliente mal falou comigo".</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
-  </div>
-  </section>
-
-  <!-- SLIDE 7 — ABERTOS DIAGNÓSTICO -->
+  <!-- SLIDE 6 — ABERTOS: CAUSAS + MELHORIA -->
   <section class="slide">
     <div class="slide-inner">
     <span class="eyebrow" style="background:var(--status-aberto);color:var(--status-aberto-text);border:1.5px solid var(--status-aberto-border);">Abertos</span>
-    <h1 class="slide-title">Abertos — onde os leads estão travando</h1>
+    <h1 class="slide-title">Abertos — causas identificadas e correções</h1>
     <p class="slide-subtitle">302 negócios (21,7% do funil)</p>
 
     <div class="stat-grid">
@@ -453,54 +442,36 @@
       <div class="stat-card"><div class="stat-dot" style="background:var(--charcoal)"></div><div class="stat-value">0,3%</div><div class="stat-label">Foram transferidos ao vendedor</div></div>
     </div>
 
-    <p style="font-size:0.92rem;color:var(--muted);margin-bottom:1.2rem;max-width:80ch;">De 302 negócios abertos, apenas 1 foi de fato transferido para o vendedor — os outros 301 seguem presos no funil da Dalila. As causas identificadas:</p>
-
-    <div class="cause-row">
-      <div class="cause-num">1</div>
-      <div class="cause-body"><div class="cause-title">Erro na ativação do FUP</div><div class="cause-text">Falha no início do mês: o follow-up automático não estava sendo disparado corretamente. Já corrigido pelo Netto.</div></div>
-      <div class="cause-status done">Corrigido</div>
-    </div>
-    <div class="cause-row">
-      <div class="cause-num">2</div>
-      <div class="cause-body"><div class="cause-title">Limite de template / janela anti-spam do Hyperflow</div><div class="cause-text">O follow não completava por restrição de template e janela do Hyperflow. Ação: quando esse erro ocorrer, o Netto transfere o lead direto ao vendedor para não ficar preso.</div></div>
-      <div class="cause-status done">Corrigido</div>
-    </div>
-    <div class="cause-row">
-      <div class="cause-num">3</div>
-      <div class="cause-body"><div class="cause-title">Regra das 2h não sendo aplicada na prática</div><div class="cause-text">Após a Dalila apresentar o valor (Q2), se o lead some por 2h ela deveria transferir ao vendedor — mas a classificação como "open" anulava a regra. Detalhado no próximo slide.</div></div>
-      <div class="cause-status pending">Em correção</div>
-    </div>
-
-    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
-  </div>
-  </section>
-
-  <!-- SLIDE 8 — ABERTOS MELHORIA -->
-  <section class="slide">
-    <div class="slide-inner">
-    <div class="badge-row">
-      <span class="eyebrow" style="background:var(--status-aberto);color:var(--status-aberto-text);border:1.5px solid var(--status-aberto-border);">Abertos</span>
-      <span class="eyebrow outline">🟡 Proposto</span>
-    </div>
-    <h1 class="slide-title" style="margin-bottom:1.6rem;">Melhoria: Desambiguação Q2 — "open" vs "won"</h1>
-
-    <div class="card on-white" style="margin-bottom:1rem;">
-      <h3>Identificação do erro</h3>
-      <p>Quando o lead via o valor (Q2) e sumia, o sistema classificava como "open" (N2 em nutrição) e mantinha em follow-up com a Dalila. Resultado: o lead mais quente que existe — o que já viu o preço — ficava preso no funil e nunca chegava ao vendedor. A regra de transbordo em 2h já existia; o gap era a classificação cair em "open" e anular a regra na prática.</p>
-    </div>
-
-    <div class="card" style="margin-bottom:1.2rem;">
-      <div class="example">Exemplo real</div>
-      <div class="example-text">Lead Dheinifer (deal 620136) travou 5 dias nessa situação, sem chegar ao vendedor.</div>
-    </div>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;max-width:90ch;">De 302 negócios abertos, apenas 1 foi de fato transferido para o vendedor — os outros 301 seguem presos no funil da Dalila.</p>
 
     <div class="two-col">
-      <div class="card">
-        <h3>O que foi feito</h3>
-        <p>Parar na Q2 vira gatilho explícito de transbordo: N2/aprovado que viu o valor e parou por +2h → status "won" (vendedor), nunca "open". O "open" passa a valer só para quem ainda não chegou na Q2.</p>
+      <div>
+        <div class="cause-row">
+          <div class="cause-num">1</div>
+          <div class="cause-body"><div class="cause-title">Erro na ativação do FUP</div><div class="cause-text">Falha no início do mês: o follow-up automático não estava sendo disparado corretamente. Já corrigido pelo Netto.</div></div>
+          <div class="cause-status done">Corrigido</div>
+        </div>
+        <div class="cause-row">
+          <div class="cause-num">2</div>
+          <div class="cause-body"><div class="cause-title">Limite de template / janela anti-spam do Hyperflow</div><div class="cause-text">O follow não completava por restrição de template e janela do Hyperflow. Ação: quando esse erro ocorrer, o Netto transfere o lead direto ao vendedor para não ficar preso.</div></div>
+          <div class="cause-status done">Corrigido</div>
+        </div>
+        <div class="cause-row">
+          <div class="cause-num">3</div>
+          <div class="cause-body"><div class="cause-title">Regra das 2h não sendo aplicada na prática</div><div class="cause-text">Após a Dalila apresentar o valor (Q2), se o lead some por 2h ela deveria transferir ao vendedor — mas a classificação como "open" anulava a regra. Correção ao lado →</div></div>
+          <div class="cause-status pending">Em correção</div>
+        </div>
       </div>
-      <div class="card on-white">
-        <h3>Impacto esperado</h3>
+      <div class="card on-white" style="display:flex; flex-direction:column; gap:0.75rem;">
+        <div class="badge-row" style="margin-bottom:0;">
+          <span style="font-size:0.85rem;font-weight:700;">Melhoria: Desambiguação Q2 — "open" vs "won"</span>
+          <span class="eyebrow outline" style="margin-bottom:0;">🟡 Proposto</span>
+        </div>
+        <p>Parar na Q2 vira gatilho explícito de transbordo: N2/aprovado que viu o valor e parou por +2h → status "won" (vendedor), nunca "open". O "open" passa a valer só para quem ainda não chegou na Q2.</p>
+        <div>
+          <div class="example">Exemplo real</div>
+          <div class="example-text" style="font-size:0.88rem;">Lead Dheinifer (deal 620136) travou 5 dias nessa situação, sem chegar ao vendedor.</div>
+        </div>
         <ul class="impact-list">
           <li>Lead que viu o preço e sumiu é entregue ao vendedor no timing certo.</li>
           <li>Card sai como "won" → automação roteia certo ao vendedor.</li>
@@ -513,7 +484,7 @@
   </div>
   </section>
 
-  <!-- SLIDE 9 — PERDIDOS NÚMEROS -->
+  <!-- SLIDE 7 — PERDIDOS NÚMEROS -->
   <section class="slide">
     <div class="slide-inner">
     <span class="eyebrow" style="background:var(--status-perdido);color:var(--status-perdido-text);">Perdidos</span>
@@ -549,7 +520,7 @@
   </div>
   </section>
 
-  <!-- SLIDE 10 — RESUMO -->
+  <!-- SLIDE 8 — RESUMO -->
   <section class="slide dark">
     <div class="slide-inner">
     <div style="font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--primary);margin-bottom:0.7rem;">Resumo</div>
