@@ -321,7 +321,7 @@
 
 <button class="nav-arrow prev" id="prevBtn" aria-label="Slide anterior">&#8592;</button>
 <button class="nav-arrow next" id="nextBtn" aria-label="Próximo slide">&#8594;</button>
-<div class="slide-counter" id="slideCounter">1 / 8</div>
+<div class="slide-counter" id="slideCounter">1 / 7</div>
 <div class="nav-dots" id="navDots"></div>
 <div class="chart-tooltip" id="chartTooltip"></div>
 <div class="deck" id="deck">
@@ -331,7 +331,7 @@
     <div class="slide-inner">
     <div style="font-family:var(--font-display);font-weight:700;letter-spacing:0.18em;font-size:0.85rem;color:var(--primary);margin-bottom:2rem;">BLIPS</div>
     <h1 style="font-family:var(--font-display);font-size:clamp(2.1rem,5vw,3.6rem);font-weight:700;letter-spacing:-0.02em;max-width:16ch;text-wrap:balance;margin:0 0 0.8rem 0;">Visão do Funil — Dalila SDR</h1>
-    <p style="font-size:1.15rem;color:#CFCFCF;max-width:58ch;margin:0 0 2.2rem 0;">Julho 2026 · Melhorias por status do funil (Ganhos, Abertos e Perdidos)</p>
+    <p style="font-size:1.15rem;color:#CFCFCF;max-width:58ch;margin:0 0 2.2rem 0;">Julho 2026 · Visão do funil e melhorias em Ganhos e Abertos</p>
     <div style="width:44px;height:5px;background:var(--primary);border-radius:3px;margin-bottom:0.9rem;"></div>
     <p style="font-size:0.9rem;color:#8F8F8F;margin:0;">1.391 negócios analisados no período</p>
   </div>
@@ -382,7 +382,7 @@
     <div class="slide-inner">
     <div style="width:44px;height:5px;background:var(--primary);border-radius:3px;margin-bottom:1.1rem;"></div>
     <h1 style="font-family:var(--font-display);font-size:clamp(1.9rem,4.4vw,3rem);font-weight:700;color:#fff;margin:0 0 0.6rem 0;">Melhorias por status do funil</h1>
-    <p style="font-size:1.05rem;color:#B5B5B5;margin:0;">Ganhos → Abertos → Perdidos (números)</p>
+    <p style="font-size:1.05rem;color:#B5B5B5;margin:0;">Ganhos → Abertos</p>
   </div>
   </section>
 
@@ -484,43 +484,7 @@
   </div>
   </section>
 
-  <!-- SLIDE 7 — PERDIDOS NÚMEROS -->
-  <section class="slide">
-    <div class="slide-inner">
-    <span class="eyebrow" style="background:var(--status-perdido);color:var(--status-perdido-text);">Perdidos</span>
-    <h1 class="slide-title">Perdidos — números do período</h1>
-    <p class="slide-subtitle">801 negócios (57,6% do funil) · sem plano de melhoria detalhado neste material</p>
-
-    <div class="two-col">
-      <div>
-        <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Principais motivos</h3>
-        <div class="hbar-row"><div class="hbar-label">Sem retorno</div><div class="hbar-track hoverable" data-tooltip="Sem retorno · 464 negócios (57,9% dos perdidos)"><div class="hbar-fill" style="width:100%;background:var(--status-perdido)"></div></div><div class="hbar-val">464</div></div>
-        <div class="hbar-row"><div class="hbar-label">Whatsapp inválido</div><div class="hbar-track hoverable" data-tooltip="Whatsapp inválido · 173 negócios (21,6% dos perdidos)"><div class="hbar-fill" style="width:37%;background:var(--status-perdido)"></div></div><div class="hbar-val">173</div></div>
-        <div class="hbar-row"><div class="hbar-label">Perdido em N1 (s/ motivo)</div><div class="hbar-track hoverable" data-tooltip="Perdido em N1 (s/ motivo) · 88 negócios (11,0% dos perdidos)"><div class="hbar-fill" style="width:19%;background:var(--status-perdido)"></div></div><div class="hbar-val">88</div></div>
-        <div class="hbar-row"><div class="hbar-label">Recadastro</div><div class="hbar-track hoverable" data-tooltip="Recadastro · 30 negócios (3,7% dos perdidos)"><div class="hbar-fill" style="width:6.5%;background:var(--status-perdido)"></div></div><div class="hbar-val">30</div></div>
-        <div class="hbar-row"><div class="hbar-label">Perdido em N2 (s/ motivo)</div><div class="hbar-track hoverable" data-tooltip="Perdido em N2 (s/ motivo) · 10 negócios (1,2% dos perdidos)"><div class="hbar-fill" style="width:2%;background:var(--status-perdido)"></div></div><div class="hbar-val">10</div></div>
-      </div>
-      <div>
-        <h3 style="font-size:0.95rem;margin:0 0 1rem 0;">Onde a perda acontece (etapa)</h3>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Contato realizado</span><strong>36,1%</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Qualificado N1</span><strong>31,1%</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Whatsapp inválido</span><strong>22,1%</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Qualificado N2</span><strong>4,6%</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;margin-bottom:1.1rem;"><span>Contato inicial</span><strong>4,2%</strong></div>
-
-        <h3 style="font-size:0.95rem;margin:0 0 0.6rem 0;">Temperatura</h3>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Não informado</span><strong>63,7%</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Frio (N1)</span><strong>31,7%</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;border-bottom:1px solid var(--border);"><span>Morno (N2)</span><strong>4,4%</strong></div>
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;padding:0.35rem 0;"><span>Quente (N3)</span><strong>0,2%</strong></div>
-      </div>
-    </div>
-
-    <div class="footer-tag"><span>Visão Funil Dalila — Julho 2026</span><span>Blips</span></div>
-  </div>
-  </section>
-
-  <!-- SLIDE 8 — RESUMO -->
+  <!-- SLIDE 7 — RESUMO -->
   <section class="slide dark">
     <div class="slide-inner">
     <div style="font-size:0.78rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--primary);margin-bottom:0.7rem;">Resumo</div>
@@ -534,10 +498,6 @@
       <div style="display:flex;gap:1rem;">
         <div style="flex:none;width:4px;background:#FFFFFF;border-radius:2px;"></div>
         <div><div style="color:#FFFFFF;font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Abertos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">FUP e janela do Hyperflow corrigidos pelo Netto; falta consolidar a desambiguação Q2 (open vs won) para destravar os 301 leads parados.</div></div>
-      </div>
-      <div style="display:flex;gap:1rem;">
-        <div style="flex:none;width:4px;background:var(--status-perdido);border-radius:2px;"></div>
-        <div><div style="color:var(--status-perdido);font-weight:700;font-size:0.9rem;margin-bottom:0.25rem;">Perdidos</div><div style="color:#D0D0D0;font-size:0.95rem;line-height:1.5;">57,6% do funil — maior parte por falta de retorno; sem plano de melhoria detalhado neste material.</div></div>
       </div>
     </div>
   </div>
